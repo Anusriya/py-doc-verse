@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.8 }}
         >
           <motion.h1 
-            className="text-6xl md:text-8xl font-bold mb-8"
+            className="text-4xl md:text-6xl font-bold mb-8"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
@@ -51,18 +51,20 @@ const Hero: React.FC = () => {
           >
             <motion.a
               href="/docs"
-              className="glass-button gradient-primary text-primary-foreground px-8 py-4 text-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
+              className="glass-button gradient-primary text-primary-foreground px-8 py-4 text-lg font-semibold w-full sm:w-auto min-w-[200px] text-center"
+              whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
               whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
             >
               Explore Documentation
             </motion.a>
             
             <motion.a
               href="/help"
-              className="glass-button px-8 py-4 text-lg font-semibold"
-              whileHover={{ scale: 1.05 }}
+              className="glass-button px-8 py-4 text-lg font-semibold w-full sm:w-auto min-w-[200px] text-center hover:bg-white/10 hover:border-primary/50"
+              whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
               whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
             >
               Get Started
             </motion.a>
@@ -70,22 +72,6 @@ const Hero: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1 }}
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center text-muted-foreground"
-        >
-          <span className="text-sm mb-2">Scroll to explore</span>
-          <ChevronDownIcon className="h-6 w-6" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 };

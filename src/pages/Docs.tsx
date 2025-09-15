@@ -22,6 +22,95 @@ interface ModelInfo {
 
 const models: ModelInfo[] = [
   {
+    id: 'deep-learning',
+    name: 'Deep Learning',
+    icon: <CpuChipIcon className="h-5 w-5" />,
+    description: 'Advanced deep learning frameworks with TensorFlow and PyTorch. Build neural networks for complex pattern recognition, with support for CNNs, RNNs, and custom architectures.',
+    code: `# Deep Learning Implementation
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+import numpy as np
+
+class DeepLearningModel:
+    def __init__(self, input_shape, num_classes=1):
+        self.input_shape = input_shape
+        self.num_classes = num_classes
+        self.model = None
+        
+    def build_model(self, hidden_layers=[512, 256, 128]):
+        """Build a customizable deep neural network"""
+        model = keras.Sequential()
+        
+        # Input layer with dropout for regularization
+        model.add(layers.Dense(
+            hidden_layers[0], 
+            activation='relu', 
+            input_shape=self.input_shape
+        ))
+        model.add(layers.BatchNormalization())
+        model.add(layers.Dropout(0.3))
+        
+        # Hidden layers with batch normalization
+        for units in hidden_layers[1:]:
+            model.add(layers.Dense(units, activation='relu'))
+            model.add(layers.BatchNormalization())
+            model.add(layers.Dropout(0.3))
+        
+        # Output layer configuration
+        if self.num_classes == 1:
+            model.add(layers.Dense(1, activation='sigmoid'))
+            model.compile(
+                optimizer='adam',
+                loss='binary_crossentropy',
+                metrics=['accuracy', 'precision', 'recall']
+            )
+        else:
+            model.add(layers.Dense(self.num_classes, activation='softmax'))
+            model.compile(
+                optimizer='adam',
+                loss='sparse_categorical_crossentropy',
+                metrics=['accuracy', 'top_5_accuracy']
+            )
+        
+        self.model = model
+        return self
+    
+    def train(self, X_train, y_train, epochs=100, validation_split=0.2):
+        """Train the deep learning model with callbacks"""
+        if self.model is None:
+            self.build_model()
+            
+        # Define callbacks
+        early_stopping = keras.callbacks.EarlyStopping(
+            monitor='val_loss', patience=10, restore_best_weights=True
+        )
+        reduce_lr = keras.callbacks.ReduceLROnPlateau(
+            monitor='val_loss', factor=0.2, patience=5
+        )
+            
+        history = self.model.fit(
+            X_train, y_train,
+            epochs=epochs,
+            validation_split=validation_split,
+            callbacks=[early_stopping, reduce_lr],
+            verbose=1
+        )
+        return history
+    
+    def predict(self, X, batch_size=32):
+        """Make predictions with batch processing"""
+        return self.model.predict(X, batch_size=batch_size)
+
+# Example usage for image classification
+# dl_model = DeepLearningModel(input_shape=(224, 224, 3), num_classes=10)
+# dl_model.build_model([1024, 512, 256])
+# history = dl_model.train(X_train, y_train, epochs=100)
+print("Deep learning framework initialized!")`,
+    packageName: 'Deep Learning Kit',
+    fileName: 'deep_learning_kit-2.0.0-py3-none-any.whl'
+  },
+  {
     id: 'regression',
     name: 'Regression Model',
     icon: <ChartBarIcon className="h-5 w-5" />,
@@ -306,7 +395,7 @@ print("Web scraping toolkit initialized!")`,
 ];
 
 const Docs: React.FC = () => {
-  const [activeModel, setActiveModel] = useState<string>('regression');
+  const [activeModel, setActiveModel] = useState<string>('deep-learning');
   const location = useLocation();
   const navigate = useNavigate();
 

@@ -237,7 +237,11 @@ const Sponsors: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="text-center mt-20"
         >
-          <div className="glass-card max-w-2xl mx-auto">
+          <motion.div 
+            className="glass-card max-w-2xl mx-auto hover:glow-primary transition-all duration-500 cursor-pointer"
+            whileHover={{ scale: 1.02, y: -8 }}
+            transition={{ duration: 0.3 }}
+          >
             <h2 className="text-2xl font-bold text-gradient mb-4">
               Become a Sponsor
             </h2>
@@ -253,7 +257,7 @@ const Sponsors: React.FC = () => {
             >
               📧 Contact Us About Sponsorship
             </motion.a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

@@ -154,7 +154,11 @@ const Help: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <div className="glass-card max-w-2xl mx-auto">
+          <motion.div 
+            className="glass-card max-w-2xl mx-auto hover:glow-accent transition-all duration-500 cursor-pointer"
+            whileHover={{ scale: 1.02, y: -5 }}
+            transition={{ duration: 0.3 }}
+          >
             <h2 className="text-2xl font-bold text-gradient mb-4">
               Still need help?
             </h2>
@@ -177,7 +181,7 @@ const Help: React.FC = () => {
                 Regression Models Guide
               </Link>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

@@ -53,32 +53,6 @@ const DocItem: React.FC<DocItemProps> = ({
         </p>
       </div>
 
-      {/* Quick Actions Toolbar - demonstrates parent control via useRef */}
-      <motion.div 
-        className="glass-card"
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
-        <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={handleQuickCopy}
-            className="glass-button text-sm px-4 py-2 hover:text-primary transition-colors"
-          >
-            📋 Quick Copy Code
-          </button>
-          <button
-            onClick={handleQuickDownload}
-            className="glass-button text-sm px-4 py-2 hover:text-accent transition-colors"
-          >
-            ⚡ Quick Download
-          </button>
-        </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          These buttons control the components below using React useRef - no direct prop passing needed!
-        </p>
-      </motion.div>
 
       {/* Download Section */}
       <motion.div 
@@ -102,19 +76,31 @@ const DocItem: React.FC<DocItemProps> = ({
 
       {/* Code Section */}
       <motion.div 
-        className="space-y-4"
+        className="space-y-6"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
         <h3 className="text-lg font-semibold">Sample Implementation</h3>
         
-        {/* CodeBlockWithCopy with ref for parent control */}
-        <CodeBlockWithCopy
-          ref={codeBlockRef}
-          code={code}
-          language="python"
-        />
+        {/* First Code Block */}
+        <div className="space-y-2">
+          <h4 className="text-md font-medium text-primary">Basic Usage</h4>
+          <CodeBlockWithCopy
+            ref={codeBlockRef}
+            code={code}
+            language="python"
+          />
+        </div>
+
+        {/* Second Code Block */}
+        <div className="space-y-2">
+          <h4 className="text-md font-medium text-primary">Advanced Example</h4>
+          <CodeBlockWithCopy
+            code={code.replace('# Example usage', '# Advanced Example Usage\n# This shows more complex implementation patterns')}
+            language="python"
+          />
+        </div>
       </motion.div>
 
       {/* Usage Notes */}

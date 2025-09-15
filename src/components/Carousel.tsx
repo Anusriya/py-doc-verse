@@ -1,10 +1,12 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, EffectFade } from 'swiper/modules';
+import { Autoplay, Pagination, EffectFade, Navigation } from 'swiper/modules';
 import { motion } from 'framer-motion';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+import 'swiper/css/navigation';
 
 interface CarouselSlide {
   id: number;
@@ -58,26 +60,31 @@ const Carousel: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-6xl mx-auto"
         >
-          <Swiper
-            modules={[Autoplay, Pagination, EffectFade]}
-            spaceBetween={30}
-            slidesPerView={1}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-              bulletClass: 'swiper-pagination-bullet !bg-primary/50 !w-3 !h-3',
-              bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary'
-            }}
-            effect="fade"
-            fadeEffect={{
-              crossFade: true
-            }}
-            loop={true}
-            className="h-96 rounded-3xl overflow-hidden"
-          >
+          <div className="relative">
+            <Swiper
+              modules={[Autoplay, Pagination, EffectFade, Navigation]}
+              spaceBetween={30}
+              slidesPerView={1}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              navigation={{
+                nextEl: '.swiper-button-next-custom',
+                prevEl: '.swiper-button-prev-custom',
+              }}
+              pagination={{
+                clickable: true,
+                bulletClass: 'swiper-pagination-bullet !bg-primary/50 !w-3 !h-3',
+                bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary'
+              }}
+              effect="fade"
+              fadeEffect={{
+                crossFade: true
+              }}
+              loop={true}
+              className="h-96 rounded-3xl overflow-hidden"
+            >
             {slides.map((slide) => (
               <SwiperSlide key={slide.id}>
                 <div className={`relative h-full bg-gradient-to-br ${slide.gradient} glass rounded-3xl p-12 flex items-center justify-center`}>
@@ -106,7 +113,16 @@ const Carousel: React.FC = () => {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+            </Swiper>
+
+            {/* Custom Navigation Buttons */}
+            <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 z-10 glass-button p-3 rounded-full hover:bg-white/20 transition-all duration-300 group">
+              <ChevronLeftIcon className="h-6 w-6 text-white group-hover:text-primary transition-colors" />
+            </button>
+            <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 z-10 glass-button p-3 rounded-full hover:bg-white/20 transition-all duration-300 group">
+              <ChevronRightIcon className="h-6 w-6 text-white group-hover:text-primary transition-colors" />
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

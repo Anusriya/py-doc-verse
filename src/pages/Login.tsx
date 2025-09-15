@@ -118,7 +118,7 @@ const Login: React.FC = () => {
 
           {/* Form */}
           <motion.div
-            className="glass-card"
+            className="glass-card backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl hover:bg-white/10 transition-all duration-300"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
