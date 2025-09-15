@@ -200,7 +200,7 @@ const Sponsors: React.FC = () => {
           >
             <h2 className="text-xl font-bold text-center mb-8">Silver Sponsors</h2>
             
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-2 gap-6">
               {sponsors.filter(s => s.tier === 'silver').map((sponsor, index) => (
                 <motion.div
                   key={sponsor.id}
@@ -210,18 +210,18 @@ const Sponsors: React.FC = () => {
                   className="glass-card hover:glow-accent transition-all duration-300 group cursor-pointer"
                   onClick={() => window.open(sponsor.website, '_blank')}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="text-2xl bg-gradient-to-br from-gray-300 to-gray-500 rounded-lg p-2 flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-start gap-4">
+                    <div className="text-3xl bg-gradient-to-br from-gray-300 to-gray-500 rounded-xl p-2 flex items-center justify-center">
                       {sponsor.logo}
                     </div>
                     <div className="flex-1">
-                      <div className={`inline-block px-2 py-1 rounded-full text-xs font-medium mb-2 bg-gradient-to-r ${tierColors[sponsor.tier]} text-white`}>
+                      <div className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 bg-gradient-to-r ${tierColors[sponsor.tier]} text-white`}>
                         {tierLabels[sponsor.tier]}
                       </div>
-                      <h3 className="font-bold mb-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-lg font-bold mb-2 group-hover:text-accent transition-colors">
                         {sponsor.name}
                       </h3>
-                      <p className="text-muted-foreground text-xs leading-relaxed">
+                      <p className="text-muted-foreground text-sm leading-relaxed">
                         {sponsor.description}
                       </p>
                     </div>

@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
             
             <motion.a
               href="/help"
-              className="glass-button px-8 py-4 text-lg font-semibold w-full sm:w-auto min-w-[200px] text-center hover:bg-white/10 hover:border-primary/50"
+              className="glass-button border border-primary/30 px-8 py-4 text-lg font-semibold w-full sm:w-auto min-w-[200px] text-center hover:bg-primary/10 hover:border-primary/50"
               whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.2 }}
