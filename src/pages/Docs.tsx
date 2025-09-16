@@ -10,6 +10,29 @@ import {
 } from '@heroicons/react/24/outline';
 import DocItem from '@/components/DocItem';
 
+const installRunCode = `pip install -e .
+python scripts/evaluate_model.py models/Dogs-vs-Cats_model.h5 data/cats_and_dogs_dataset/train evaluation_results`;
+
+const pythonUsageCode = `import os
+from PyAIStatus import evaluate
+
+#Defining Location
+model_location = os.path.join("models", "Dogs-vs-Cats_model.h5")
+data_location = os.path.join("data", "cats_and_dogs_dataset", "train")
+output_location = os.path.join("evaluation_results")
+
+#Calling the evaluate function
+if not os.path.exists(model_location):
+    print(f"Error: Model file not found at '{model_location}'")
+elif not os.path.exists(data_location):
+    print(f"Error: Dataset directory not found at '{data_location}'")
+else:
+    evaluate(
+        model_path=model_location,
+        dataset_dir=data_location,
+        output_dir=output_location
+    )`;
+
 interface ModelInfo {
   id: string;
   name: string;
@@ -532,7 +555,8 @@ const Docs: React.FC = () => {
                 <DocItem
                   title={currentModel.name}
                   description={currentModel.description}
-                  code={currentModel.code}
+                  code={installRunCode}
+                  secondaryCode={pythonUsageCode}
                   packageName={currentModel.packageName}
                   fileName={currentModel.fileName}
                 />

@@ -9,6 +9,7 @@ interface DocItemProps {
   code: string;
   packageName: string;
   fileName: string;
+  secondaryCode?: string;
 }
 
 // Main component that demonstrates useRef pattern for controlling child components
@@ -17,7 +18,8 @@ const DocItem: React.FC<DocItemProps> = ({
   description, 
   code, 
   packageName, 
-  fileName 
+  fileName,
+  secondaryCode
 }) => {
   // useRef hooks to control child components from parent
   const codeBlockRef = useRef<CodeBlockRef>(null);
@@ -97,7 +99,7 @@ const DocItem: React.FC<DocItemProps> = ({
         <div className="space-y-2">
           <h4 className="text-md font-medium text-primary">How to import the library and run it in a python file?</h4>
           <CodeBlockWithCopy
-            code={code.replace('# Example usage', '# Advanced Example Usage\n# This shows more complex implementation patterns')}
+            code={secondaryCode ?? code}
             language="python"
           />
         </div>
