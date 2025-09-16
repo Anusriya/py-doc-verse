@@ -100,8 +100,8 @@ const Sponsors: React.FC = () => {
             Our Amazing Sponsors
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            We're grateful to the organizations that support our mission to make Python documentation 
-            accessible and beautiful. Their contributions help us maintain and improve PyLibHub for the entire community.
+            We're grateful to the organizations that support our mission to advance ML model evaluation 
+            and make comprehensive evaluation tools accessible to researchers worldwide. Their contributions help us maintain and improve the evaluation platform.
           </p>
         </motion.div>
 
@@ -248,8 +248,8 @@ const Sponsors: React.FC = () => {
               Become a Sponsor
             </h2>
             <p className="text-muted-foreground mb-6 leading-relaxed">
-              Support the Python community and get your organization featured here. 
-              Sponsorship helps us maintain our documentation platform and develop new features.
+              Support ML research and get your organization featured here. 
+              Sponsorship helps us maintain our evaluation platform and develop new ML tools for the community.
             </p>
             <motion.a
               href="mailto:sponsors@pylibhub.dev"

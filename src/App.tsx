@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Home from "@/pages/Home";
 import Help from "@/pages/Help";
 import Docs from "@/pages/Docs";
+import Community from "@/pages/Community";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Sponsors from "@/pages/Sponsors";
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/help" element={<Help />} />
               <Route path="/docs" element={<Docs />} />
+              <Route path="/community" element={<Community />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/sponsors" element={<Sponsors />} />

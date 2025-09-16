@@ -12,6 +12,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { name: 'Help', path: '/help' },
     { name: 'Docs', path: '/docs' },
+    { name: 'Community', path: '/community' },
     { name: 'Sponsors', path: '/sponsors' },
   ];
 

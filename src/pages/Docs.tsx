@@ -23,92 +23,153 @@ interface ModelInfo {
 const models: ModelInfo[] = [
   {
     id: 'deep-learning',
-    name: 'Deep Learning',
+    name: 'ML Evaluation Suite',
     icon: <CpuChipIcon className="h-5 w-5" />,
-    description: 'Advanced deep learning frameworks with TensorFlow and PyTorch. Build neural networks for complex pattern recognition, with support for CNNs, RNNs, and custom architectures.',
-    code: `# Deep Learning Implementation
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
+    description: 'Comprehensive ML model evaluation pipeline with metrics calculation, robustness testing, explainability analysis, and automated HTML report generation for machine learning competitions.',
+    code: `# ML Evaluation Pipeline Implementation
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import confusion_matrix, roc_curve, auc
+from sklearn.calibration import calibration_curve
+import tensorflow as tf
+import cv2
+import os
+import json
+from datetime import datetime
 
-class DeepLearningModel:
-    def __init__(self, input_shape, num_classes=1):
-        self.input_shape = input_shape
-        self.num_classes = num_classes
+class MLEvaluationPipeline:
+    def __init__(self, model_path, dataset_path, random_seed=42):
+        """Initialize ML evaluation pipeline"""
+        self.model_path = model_path
+        self.dataset_path = dataset_path
+        self.random_seed = random_seed
         self.model = None
+        self.results = {}
         
-    def build_model(self, hidden_layers=[512, 256, 128]):
-        """Build a customizable deep neural network"""
-        model = keras.Sequential()
+        # Set random seeds for reproducibility
+        np.random.seed(random_seed)
+        tf.random.set_seed(random_seed)
         
-        # Input layer with dropout for regularization
-        model.add(layers.Dense(
-            hidden_layers[0], 
-            activation='relu', 
-            input_shape=self.input_shape
-        ))
-        model.add(layers.BatchNormalization())
-        model.add(layers.Dropout(0.3))
-        
-        # Hidden layers with batch normalization
-        for units in hidden_layers[1:]:
-            model.add(layers.Dense(units, activation='relu'))
-            model.add(layers.BatchNormalization())
-            model.add(layers.Dropout(0.3))
-        
-        # Output layer configuration
-        if self.num_classes == 1:
-            model.add(layers.Dense(1, activation='sigmoid'))
-            model.compile(
-                optimizer='adam',
-                loss='binary_crossentropy',
-                metrics=['accuracy', 'precision', 'recall']
-            )
-        else:
-            model.add(layers.Dense(self.num_classes, activation='softmax'))
-            model.compile(
-                optimizer='adam',
-                loss='sparse_categorical_crossentropy',
-                metrics=['accuracy', 'top_5_accuracy']
-            )
-        
-        self.model = model
-        return self
+    def load_model(self):
+        """Load Keras model from .h5 file"""
+        try:
+            self.model = tf.keras.models.load_model(self.model_path)
+            print(f"Model loaded successfully from {self.model_path}")
+        except Exception as e:
+            raise Exception(f"Failed to load model: {str(e)}")
     
-    def train(self, X_train, y_train, epochs=100, validation_split=0.2):
-        """Train the deep learning model with callbacks"""
-        if self.model is None:
-            self.build_model()
-            
-        # Define callbacks
-        early_stopping = keras.callbacks.EarlyStopping(
-            monitor='val_loss', patience=10, restore_best_weights=True
-        )
-        reduce_lr = keras.callbacks.ReduceLROnPlateau(
-            monitor='val_loss', factor=0.2, patience=5
-        )
-            
-        history = self.model.fit(
-            X_train, y_train,
-            epochs=epochs,
-            validation_split=validation_split,
-            callbacks=[early_stopping, reduce_lr],
-            verbose=1
-        )
-        return history
+    def preprocess_images(self, image_paths, target_size=(224, 224)):
+        """Preprocess images for model inference"""
+        images = []
+        for path in image_paths:
+            img = cv2.imread(path)
+            img = cv2.resize(img, target_size)
+            img = img.astype('float32') / 255.0
+            images.append(img)
+        return np.array(images)
     
-    def predict(self, X, batch_size=32):
-        """Make predictions with batch processing"""
-        return self.model.predict(X, batch_size=batch_size)
+    def calculate_primary_metrics(self, y_true, y_pred):
+        """Calculate primary evaluation metrics"""
+        accuracy = accuracy_score(y_true, y_pred)
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            y_true, y_pred, average='weighted'
+        )
+        
+        return {
+            'accuracy': accuracy,
+            'precision': precision,
+            'recall': recall,
+            'f1_score': f1
+        }
+    
+    def bootstrap_confidence_intervals(self, y_true, y_pred, n_bootstrap=1000):
+        """Calculate bootstrap confidence intervals"""
+        bootstrap_scores = []
+        n_samples = len(y_true)
+        
+        for _ in range(n_bootstrap):
+            # Sample with replacement
+            indices = np.random.choice(n_samples, n_samples, replace=True)
+            bootstrap_accuracy = accuracy_score(
+                y_true[indices], y_pred[indices]
+            )
+            bootstrap_scores.append(bootstrap_accuracy)
+        
+        ci_lower = np.percentile(bootstrap_scores, 2.5)
+        ci_upper = np.percentile(bootstrap_scores, 97.5)
+        
+        return ci_lower, ci_upper
+    
+    def robustness_testing(self, images, labels, corruption_types):
+        """Apply robustness tests with various corruptions"""
+        results = {}
+        
+        for corruption in corruption_types:
+            if corruption == 'gaussian_noise':
+                corrupted = self.add_gaussian_noise(images)
+            elif corruption == 'gaussian_blur':
+                corrupted = self.add_gaussian_blur(images)
+            elif corruption == 'jpeg_compression':
+                corrupted = self.add_jpeg_compression(images)
+            elif corruption == 'occlusion':
+                corrupted = self.add_occlusion(images)
+            
+            # Evaluate on corrupted images
+            pred_probs = self.model.predict(corrupted)
+            pred_classes = np.argmax(pred_probs, axis=1)
+            
+            accuracy = accuracy_score(labels, pred_classes)
+            results[corruption] = accuracy
+            
+        return results
+    
+    def generate_html_report(self, output_path='report.html'):
+        """Generate comprehensive HTML evaluation report"""
+        html_content = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>ML Model Evaluation Report</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 40px; }}
+                .metric {{ background: #f5f5f5; padding: 10px; margin: 10px 0; }}
+                .chart {{ text-align: center; margin: 20px 0; }}
+            </style>
+        </head>
+        <body>
+            <h1>ML Model Evaluation Report</h1>
+            <h2>Environment Information</h2>
+            <p>Python Version: {self.get_python_version()}</p>
+            <p>Random Seed: {self.random_seed}</p>
+            <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            
+            <h2>Primary Metrics</h2>
+            <div class="metric">
+                <strong>Accuracy:</strong> {self.results.get('accuracy', 'N/A'):.4f}
+            </div>
+            
+            <h2>Bootstrap Confidence Intervals</h2>
+            <p>95% CI: [{self.results.get('ci_lower', 'N/A'):.4f}, {self.results.get('ci_upper', 'N/A'):.4f}]</p>
+            
+            <h2>Robustness Test Results</h2>
+            {self.generate_robustness_table()}
+            
+        </body>
+        </html>
+        '''
+        
+        with open(output_path, 'w') as f:
+            f.write(html_content)
+        print(f"Report generated: {output_path}")
 
-# Example usage for image classification
-# dl_model = DeepLearningModel(input_shape=(224, 224, 3), num_classes=10)
-# dl_model.build_model([1024, 512, 256])
-# history = dl_model.train(X_train, y_train, epochs=100)
-print("Deep learning framework initialized!")`,
-    packageName: 'Deep Learning Kit',
-    fileName: 'deep_learning_kit-2.0.0-py3-none-any.whl'
+# Example usage for evaluation pipeline
+# evaluator = MLEvaluationPipeline('model.h5', 'dataset/', random_seed=42)
+# evaluator.load_model()
+# evaluator.run_full_evaluation()
+print("ML Evaluation Pipeline initialized!")`,
+    packageName: 'ML Evaluation Suite',
+    fileName: 'ml_evaluation_suite-3.0.0-py3-none-any.whl'
   },
   {
     id: 'regression',

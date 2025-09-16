@@ -15,38 +15,54 @@ interface FAQItem {
 const faqData: FAQItem[] = [
   {
     id: 1,
-    question: "How do I get started with Python machine learning libraries?",
-    answer: "Begin with our comprehensive documentation for popular ML libraries like scikit-learn, TensorFlow, and PyTorch. Start with our Regression Model guide for a solid foundation in predictive modeling.",
+    question: "How do I set up the ML evaluation pipeline?",
+    answer: "Start by installing the required packages and dependencies. The evaluation pipeline follows a specific order: environment snapshot, data preparation, model loading, preprocessing, inference, and comprehensive analysis. Check our documentation for the complete setup guide.",
     links: [
-      { text: "View Regression Model Documentation", href: "/docs#regression" },
-      { text: "Explore All ML Models", href: "/docs" }
+      { text: "Setup Guide", href: "/docs" },
+      { text: "Documentation", href: "/docs" }
     ]
   },
   {
     id: 2,
-    question: "What's included in the downloadable packages?",
-    answer: "Each package includes pre-configured libraries, sample datasets, example notebooks, and comprehensive documentation. All packages are tested and ready for immediate use in your projects.",
+    question: "What metrics are included in the evaluation report?",
+    answer: "Our evaluation library generates comprehensive reports including primary metrics (accuracy, precision, recall), confusion matrices, ROC/PR curves, bootstrap confidence intervals, calibration analysis, robustness tests, and explainability visualizations.",
+    links: [
+      { text: "Metrics Documentation", href: "/docs" }
+    ]
   },
   {
     id: 3,
-    question: "How do I install and use the downloaded packages?",
-    answer: "After downloading, extract the package and follow the included README. Most packages can be installed with 'pip install package-name.whl' and include getting started examples in the docs folder.",
+    question: "How do I implement bootstrap confidence intervals?",
+    answer: "The library includes built-in bootstrap functionality for computing 95% confidence intervals on your primary metrics. You can specify the number of bootstrap samples and random seed for reproducible results.",
     links: [
-      { text: "View Installation Guide", href: "/docs" }
+      { text: "Bootstrap Guide", href: "/docs" },
+      { text: "Community Examples", href: "/community" }
     ]
   },
   {
     id: 4,
-    question: "Can I contribute to the documentation?",
-    answer: "Yes! We welcome contributions from the community. You can suggest improvements, report issues, or submit new documentation through our GitHub repository. Check our contribution guidelines for details.",
+    question: "What robustness tests are supported?",
+    answer: "The evaluation suite includes tests for Gaussian noise, Gaussian blur, JPEG compression, and occlusion (random box). Each test can be applied at multiple severity levels to measure performance degradation.",
+    links: [
+      { text: "Robustness Testing", href: "/docs" }
+    ]
   },
   {
     id: 5,
-    question: "Are there any prerequisites for using these libraries?",
-    answer: "Basic Python knowledge is recommended. Some advanced machine learning models may require understanding of statistics and linear algebra. Each documentation page lists specific prerequisites and recommended background knowledge.",
+    question: "How do I generate explainability visualizations?",
+    answer: "The library supports multiple attribution methods including Grad-CAM and Integrated Gradients. You can generate attribution maps and compute overlap coefficients with ground-truth masks if available.",
     links: [
-      { text: "Python Basics Guide", href: "/docs" },
-      { text: "Classification Models", href: "/docs#classification" }
+      { text: "Explainability Guide", href: "/docs" },
+      { text: "Community Discussions", href: "/community" }
+    ]
+  },
+  {
+    id: 6,
+    question: "Can I get help with implementation issues?",
+    answer: "Yes! Join our community forum where researchers share solutions, discuss challenges, and help each other with implementation issues. You can also check our comprehensive documentation and code examples.",
+    links: [
+      { text: "Community Forum", href: "/community" },
+      { text: "Documentation", href: "/docs" }
     ]
   }
 ];
@@ -72,10 +88,10 @@ const Help: React.FC = () => {
           className="text-center mb-16"
         >
           <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-6">
-            How can we help?
+            ML Evaluation Help
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Find answers to common questions about using our Python library documentation platform.
+            Find answers to common questions about ML model evaluation, implementation guidance, and troubleshooting tips.
           </p>
         </motion.div>
 
@@ -163,22 +179,22 @@ const Help: React.FC = () => {
               Still need help?
             </h2>
             <p className="text-muted-foreground mb-6">
-              Explore our comprehensive documentation or start with our most popular guides.
+              Can't find what you're looking for? Join our community forum to connect with other researchers and get personalized help.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/docs"
+                to="/community"
                 className="inline-flex items-center gap-2 glass-button gradient-primary text-primary-foreground font-medium"
               >
                 <CodeBracketIcon className="h-5 w-5" />
-                Browse Documentation
+                Join Community
               </Link>
               <Link
-                to="/docs#regression"
+                to="/docs"
                 className="inline-flex items-center gap-2 glass-button"
               >
                 <BookOpenIcon className="h-5 w-5" />
-                Regression Models Guide
+                View Documentation
               </Link>
             </div>
           </motion.div>
