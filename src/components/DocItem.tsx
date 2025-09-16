@@ -85,7 +85,7 @@ const DocItem: React.FC<DocItemProps> = ({
         
         {/* First Code Block */}
         <div className="space-y-2">
-          <h4 className="text-md font-medium text-primary">Basic Usage</h4>
+          <h4 className="text-md font-medium text-primary">How to install and run locally?</h4>
           <CodeBlockWithCopy
             ref={codeBlockRef}
             code={code}
@@ -95,7 +95,7 @@ const DocItem: React.FC<DocItemProps> = ({
 
         {/* Second Code Block */}
         <div className="space-y-2">
-          <h4 className="text-md font-medium text-primary">Advanced Example</h4>
+          <h4 className="text-md font-medium text-primary">How to import the library and run it in a python file?</h4>
           <CodeBlockWithCopy
             code={code.replace('# Example usage', '# Advanced Example Usage\n# This shows more complex implementation patterns')}
             language="python"

@@ -23,7 +23,7 @@ interface ModelInfo {
 const models: ModelInfo[] = [
   {
     id: 'deep-learning',
-    name: 'ML Evaluation Suite',
+    name: 'DL Evaluation Suite',
     icon: <CpuChipIcon className="h-5 w-5" />,
     description: 'Comprehensive ML model evaluation pipeline with metrics calculation, robustness testing, explainability analysis, and automated HTML report generation for machine learning competitions.',
     code: `# ML Evaluation Pipeline Implementation

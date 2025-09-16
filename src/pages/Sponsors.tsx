@@ -86,15 +86,6 @@ const Sponsors: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <motion.div
-            className="inline-flex items-center gap-2 mb-4"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <HeartIcon className="h-8 w-8 text-red-500" />
-            <span className="text-2xl">❤️</span>
-          </motion.div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-6">
             Our Amazing Sponsors

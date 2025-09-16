@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Navbar from "@/components/Navbar";
 import Home from "@/pages/Home";
+import TryNow from "@/pages/TryNow";
 import Help from "@/pages/Help";
 import Docs from "@/pages/Docs";
 import Community from "@/pages/Community";
@@ -27,6 +28,7 @@ const App = () => (
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/try-now" element={<TryNow />} />
               <Route path="/help" element={<Help />} />
               <Route path="/docs" element={<Docs />} />
               <Route path="/community" element={<Community />} />

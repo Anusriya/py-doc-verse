@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   MessageCircle, 
   ThumbsUp, 
@@ -14,7 +16,9 @@ import {
   AlertTriangle,
   CheckCircle,
   HelpCircle,
-  Code
+  Code,
+  X,
+  Plus
 } from 'lucide-react';
 
 interface Discussion {
@@ -130,6 +134,12 @@ const typeColors = {
 const Community = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('recent');
+  const [showNewDiscussionForm, setShowNewDiscussionForm] = useState(false);
+  const [newDiscussionTitle, setNewDiscussionTitle] = useState('');
+  const [newDiscussionContent, setNewDiscussionContent] = useState('');
+  const [newDiscussionType, setNewDiscussionType] = useState<'error' | 'question' | 'discussion'>('discussion');
+  const [newDiscussionTags, setNewDiscussionTags] = useState<string[]>([]);
+  const [currentTag, setCurrentTag] = useState('');
 
   const filteredDiscussions = discussions.filter(discussion => 
     selectedFilter === 'all' || discussion.type === selectedFilter
@@ -140,6 +150,49 @@ const Community = () => {
     if (sortBy === 'replies') return b.replies - a.replies;
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
+
+  const handleAddTag = () => {
+    if (currentTag.trim() && !newDiscussionTags.includes(currentTag.trim())) {
+      setNewDiscussionTags([...newDiscussionTags, currentTag.trim()]);
+      setCurrentTag('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setNewDiscussionTags(newDiscussionTags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleSubmitDiscussion = () => {
+    if (newDiscussionTitle.trim() && newDiscussionContent.trim()) {
+      const newDiscussion: Discussion = {
+        id: Date.now().toString(),
+        title: newDiscussionTitle.trim(),
+        author: 'current_user',
+        content: newDiscussionContent.trim(),
+        type: newDiscussionType,
+        tags: newDiscussionTags,
+        likes: 0,
+        replies: 0,
+        views: 1,
+        createdAt: new Date().toISOString().split('T')[0],
+        lastActivity: 'just now'
+      };
+      
+      // Add to discussions array (in a real app, this would be sent to a server)
+      discussions.unshift(newDiscussion);
+      
+      // Reset form
+      setNewDiscussionTitle('');
+      setNewDiscussionContent('');
+      setNewDiscussionType('discussion');
+      setNewDiscussionTags([]);
+      setCurrentTag('');
+      setShowNewDiscussionForm(false);
+      
+      // Update filter to show the new discussion
+      setSelectedFilter(newDiscussionType);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -310,6 +363,131 @@ const Community = () => {
           </AnimatePresence>
         </div>
 
+        {/* New Discussion Form */}
+        <AnimatePresence>
+          {showNewDiscussionForm && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8"
+            >
+              <Card className="glass-card max-w-4xl mx-auto">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-2xl">Start New Discussion</CardTitle>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowNewDiscussionForm(false)}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Title Input */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Discussion Title</label>
+                    <Input
+                      value={newDiscussionTitle}
+                      onChange={(e) => setNewDiscussionTitle(e.target.value)}
+                      placeholder="Enter a descriptive title for your discussion..."
+                      className="glass"
+                    />
+                  </div>
+
+                  {/* Type Selection */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Discussion Type</label>
+                    <div className="flex gap-2">
+                      {[
+                        { key: 'discussion', label: 'Discussion', icon: MessageCircle },
+                        { key: 'question', label: 'Question', icon: HelpCircle },
+                        { key: 'error', label: 'Error', icon: AlertTriangle }
+                      ].map((type) => (
+                        <Button
+                          key={type.key}
+                          variant={newDiscussionType === type.key ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setNewDiscussionType(type.key as any)}
+                          className="glass-button"
+                        >
+                          <type.icon className="h-4 w-4 mr-2" />
+                          {type.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Tags</label>
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        value={currentTag}
+                        onChange={(e) => setCurrentTag(e.target.value)}
+                        placeholder="Add a tag..."
+                        className="glass flex-1"
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddTag()}
+                      />
+                      <Button onClick={handleAddTag} size="sm" className="glass-button">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {newDiscussionTags.map((tag) => (
+                        <Badge key={tag} variant="outline" className="flex items-center gap-1">
+                          {tag}
+                          <button
+                            onClick={() => handleRemoveTag(tag)}
+                            className="ml-1 hover:text-red-500"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Discussion Content</label>
+                    <Textarea
+                      value={newDiscussionContent}
+                      onChange={(e) => setNewDiscussionContent(e.target.value)}
+                      placeholder="Describe your question, error, or topic for discussion..."
+                      rows={6}
+                      className="glass"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowNewDiscussionForm(false)}
+                      className="glass-button"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleSubmitDiscussion}
+                      className="gradient-primary text-primary-foreground font-medium"
+                      disabled={!newDiscussionTitle.trim() || !newDiscussionContent.trim()}
+                    >
+                      <Code className="h-4 w-4 mr-2" />
+                      Post Discussion
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Call to Action */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -317,14 +495,17 @@ const Community = () => {
           transition={{ delay: 0.5 }}
           className="text-center mt-12"
         >
-          <Card className="glass-card max-w-2xl mx-auto">
+          <Card className="glass-card max-w-2xl mx-auto hover:glow-primary transition-all duration-300">
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-4">Join the Discussion</h3>
               <p className="text-muted-foreground mb-6">
                 Have a question about ML evaluation? Encountered an error in your pipeline? 
                 Share your experience and help the community grow!
               </p>
-              <Button className="gradient-primary text-primary-foreground font-medium">
+              <Button 
+                className="gradient-primary text-primary-foreground font-medium"
+                onClick={() => setShowNewDiscussionForm(true)}
+              >
                 <Code className="h-4 w-4 mr-2" />
                 Start New Discussion
               </Button>

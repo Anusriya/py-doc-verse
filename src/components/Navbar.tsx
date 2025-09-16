@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SunIcon, MoonIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
+import IconPng from '../../images/Icon.png';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
     { name: 'Docs', path: '/docs' },
     { name: 'Community', path: '/community' },
     { name: 'Sponsors', path: '/sponsors' },
+    { name: 'Try Now', path: '/try-now' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -29,14 +31,12 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <motion.div 
-              className="p-2 rounded-xl gradient-primary"
-              whileHover={{ scale: 1.05, rotate: 180 }}
-              transition={{ duration: 0.3 }}
-            >
-              <CodeBracketIcon className="h-6 w-6 text-primary-foreground" />
-            </motion.div>
-            <span className="text-xl font-bold text-gradient">PyLibHub</span>
+            <img
+              src={IconPng}
+              alt="PyAIStatus logo"
+              className="h-8 w-8 rounded-xl object-cover"
+            />
+            <span className="text-xl font-bold text-gradient">PyAIStatus</span>
           </Link>
 
           {/* Navigation Items */}
